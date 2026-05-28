@@ -38,17 +38,70 @@
             </NButton>
 
             <!-- 核心导航元素 -->
-            <div class="core-navigation">
+            <div v-if="!isMobile" class="core-navigation">
               <slot name="core-nav"></slot>
             </div>
           </NFlex>
 
           <!-- 右侧：操作按钮 -->
-          <NFlex align="center" :size="8" :wrap="true" justify="end" class="nav-actions">
+          <NFlex v-if="!isMobile" align="center" :size="8" :wrap="true" justify="end" class="nav-actions">
             <slot name="actions"></slot>
           </NFlex>
+          <NButton
+            v-else
+            quaternary
+            circle
+            size="large"
+            class="mobile-menu-button"
+            aria-label="Open menu"
+            @click="openMobileMenu"
+          >
+            <template #icon>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <path d="M4 7h16" />
+                <path d="M4 12h16" />
+                <path d="M4 17h16" />
+              </svg>
+            </template>
+          </NButton>
         </NFlex>
       </NLayoutHeader>
+
+      <Transition name="mobile-menu">
+        <div
+          v-if="isMobile && mobileMenuOpen"
+          class="mobile-menu-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Main menu"
+        >
+          <div class="mobile-menu-drawer">
+            <div class="mobile-menu-drawer-header">
+              <NButton
+                quaternary
+                circle
+                size="large"
+                class="mobile-menu-close"
+                aria-label="Close menu"
+                @click="closeMobileMenu"
+              >
+                <template #icon>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                    <path d="M6 6l12 12" />
+                    <path d="M18 6L6 18" />
+                  </svg>
+                </template>
+              </NButton>
+            </div>
+            <div class="mobile-drawer-core-navigation">
+              <slot name="core-nav"></slot>
+            </div>
+            <div class="mobile-drawer-actions">
+              <slot name="actions"></slot>
+            </div>
+          </div>
+        </div>
+      </Transition>
 
       <!-- 主要内容区域 - 严格控制在剩余空间内 -->
       <NLayoutContent has-sider
@@ -98,21 +151,42 @@ const fallbackLogoSrc = createFallbackSvg()
 
 // 响应式Logo尺寸 - 使用更智能的检测
 const windowWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1024)
+const isMobile = computed(() => windowWidth.value < 640)
+const mobileMenuOpen = ref(false)
+
+const openMobileMenu = () => {
+  mobileMenuOpen.value = true
+}
+
+const closeMobileMenu = () => {
+  mobileMenuOpen.value = false
+}
+
+const handleKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') {
+    closeMobileMenu()
+  }
+}
 
 const updateWindowWidth = () => {
   windowWidth.value = window.innerWidth
+  if (window.innerWidth >= 640) {
+    closeMobileMenu()
+  }
 }
 
 onMounted(() => {
   if (typeof window !== 'undefined') {
     windowWidth.value = window.innerWidth
     window.addEventListener('resize', updateWindowWidth)
+    window.addEventListener('keydown', handleKeydown)
   }
 })
 
 onUnmounted(() => {
   if (typeof window !== 'undefined') {
     window.removeEventListener('resize', updateWindowWidth)
+    window.removeEventListener('keydown', handleKeydown)
   }
 })
 
@@ -159,6 +233,102 @@ const openBrandWebsite = async () => {
 
 .nav-actions {
   min-height: 40px;
+}
+
+.mobile-menu-button,
+.mobile-menu-close {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.mobile-menu-button svg,
+.mobile-menu-close svg {
+  width: 22px;
+  height: 22px;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  width: 100vw;
+  height: 100vh;
+  background: var(--n-color);
+}
+
+.mobile-menu-drawer {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: max(12px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+  overflow: auto;
+  background: var(--n-color);
+  color: var(--n-text-color);
+}
+
+.mobile-menu-drawer-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 18px;
+}
+
+.mobile-drawer-core-navigation {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--n-border-color);
+}
+
+.mobile-drawer-core-navigation [data-testid="core-nav"] {
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  gap: 12px !important;
+}
+
+.mobile-drawer-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+}
+
+.mobile-drawer-actions .page-destination-group,
+.mobile-drawer-actions .modal-action-group,
+.mobile-drawer-actions .aux-icon-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-left: 0;
+}
+
+.mobile-drawer-actions .page-destination-group {
+  padding-right: 0;
+  padding-bottom: 18px;
+  border-right: 0;
+  border-bottom: 1px solid var(--n-border-color);
+}
+
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: transform 0.26s ease, opacity 0.26s ease;
+}
+
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.mobile-menu-enter-to,
+.mobile-menu-leave-from {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 .brand-link {
