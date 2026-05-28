@@ -106,7 +106,7 @@
       <!-- 主要内容区域 - 严格控制在剩余空间内 -->
       <NLayoutContent has-sider
         style="flex: 1; min-height: 0; overflow: hidden;"
-        content-style="height: 100%; max-height: 100%; min-height: 0; box-sizing: border-box; padding: 24px clamp(16px, 2vw, 48px) 40px; display: flex; flex-direction: column; align-items: stretch; overflow: hidden;"
+        :content-style="layoutContentStyle"
       >
         <div class="main-content-wrapper">
           <slot name="main"></slot>
@@ -123,6 +123,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue'
+import type { CSSProperties } from 'vue'
 
 import { useI18n } from 'vue-i18n'
 import { NButton, NLayout, NLayoutHeader, NLayoutContent, NFlex, NText } from 'naive-ui'
@@ -198,6 +199,18 @@ const logoSize = computed(() => {
   }
   return 28 // 默认尺寸
 })
+
+const layoutContentStyle = computed<CSSProperties>(() => ({
+  height: '100%',
+  maxHeight: '100%',
+  minHeight: 0,
+  boxSizing: 'border-box',
+  padding: isMobile.value ? '5px' : '24px clamp(16px, 2vw, 48px) 40px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'stretch',
+  overflow: 'hidden',
+}))
 
 const openBrandWebsite = async () => {
   await openExternalUrl('https://always200.com', { logPrefix: 'MainLayout' })

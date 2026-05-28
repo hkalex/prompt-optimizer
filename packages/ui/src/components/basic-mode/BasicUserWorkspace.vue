@@ -13,22 +13,6 @@
             />
         </div>
 
-        <!-- Mobile pane switcher -->
-        <div v-if="isMobile" class="mobile-pane-switcher">
-            <button
-                :class="['pane-tab', { active: activeMobilePane === 'optimize' }]"
-                @click="activeMobilePane = 'optimize'"
-            >
-                {{ t('promptOptimizer.optimize') }}
-            </button>
-            <button
-                :class="['pane-tab', { active: activeMobilePane === 'test' }]"
-                @click="activeMobilePane = 'test'"
-            >
-                {{ t('test.layout.test') }}
-            </button>
-        </div>
-
         <div
             ref="splitRootRef"
             class="basic-user-split"
@@ -37,7 +21,6 @@
         >
             <!-- 左侧：优化区域 -->
             <div
-                v-if="!isMobile || activeMobilePane === 'optimize'"
                 class="split-pane"
                 style="min-width: 0; height: 100%; overflow: hidden;"
             >
@@ -217,7 +200,6 @@
 
             <!-- 右侧：测试区域 -->
             <div
-                v-if="!isMobile || activeMobilePane === 'test'"
                 ref="testPaneRef"
                 class="split-pane"
                 style="min-width: 0; height: 100%; overflow: hidden;"
@@ -1158,7 +1140,6 @@ const isInputPanelCollapsed = ref(false)
 
 // 响应式布局状态
 const { isMobile } = useResponsive()
-const activeMobilePane = ref<'optimize' | 'test'>('optimize')
 
 // 提示词摘要（折叠态显示）
 const promptSummary = computed(() => {
@@ -1755,14 +1736,22 @@ defineExpose({
 }
 
 .basic-user-split.mobile-mode {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     height: auto;
     overflow: visible;
 }
 
 .basic-user-split.mobile-mode .split-pane {
-    height: calc(100vh - 280px);
-    min-height: 200px;
+    height: auto !important;
+    min-height: 0;
+    overflow: visible !important;
+}
+
+.basic-user-split.mobile-mode .split-pane > .n-flex {
+    height: auto !important;
+    overflow: visible !important;
 }
 
 .split-pane {
