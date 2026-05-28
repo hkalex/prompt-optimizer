@@ -226,6 +226,18 @@ const openBrandWebsite = async () => {
     margin-left: 8px;
     padding-left: 8px;
   }
+
+  .nav-header-enhanced {
+    min-height: 56px !important;
+    padding: 8px 12px !important;
+  }
+}
+
+/* 内容区域移动端适配 */
+@media (max-width: 639px) {
+  .main-content-wrapper {
+    padding: 0;
+  }
 }
 
 .custom-select {

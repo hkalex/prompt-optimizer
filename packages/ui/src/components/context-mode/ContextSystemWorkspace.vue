@@ -8,13 +8,35 @@
                 @clear="handleClearContent"
             />
         </div>
+
+        <!-- Mobile pane switcher -->
+        <div v-if="isMobile" class="mobile-pane-switcher">
+            <button
+                :class="['pane-tab', { active: activeMobilePane === 'optimize' }]"
+                @click="activeMobilePane = 'optimize'"
+            >
+                {{ t('promptOptimizer.optimize') }}
+            </button>
+            <button
+                :class="['pane-tab', { active: activeMobilePane === 'test' }]"
+                @click="activeMobilePane = 'test'"
+            >
+                {{ t('test.layout.test') }}
+            </button>
+        </div>
+
         <div
             ref="splitRootRef"
             class="context-system-split"
-            :style="{ gridTemplateColumns: `${mainSplitLeftPct}% 12px 1fr` }"
+            :class="{ 'mobile-mode': isMobile }"
+            :style="isMobile ? {} : { gridTemplateColumns: `${mainSplitLeftPct}% 12px 1fr` }"
         >
             <!-- 左侧：优化区域 -->
-            <div class="split-pane" style="min-width: 0; height: 100%; overflow: hidden;">
+            <div
+                v-if="!isMobile || activeMobilePane === 'optimize'"
+                class="split-pane"
+                style="min-width: 0; height: 100%; overflow: hidden;"
+            >
                 <NFlex
                     vertical
                     :style="{ overflow: 'auto', height: '100%', minHeight: 0 }"
@@ -168,6 +190,7 @@
             </div>
 
             <div
+                v-if="!isMobile"
                 class="split-divider"
                 role="separator"
                 tabindex="0"
@@ -179,7 +202,12 @@
             />
 
             <!-- 右侧：测试区域（变量共享 + 多列 variants） -->
-            <div ref="testPaneRef" class="split-pane" style="min-width: 0; height: 100%; overflow: hidden;">
+            <div
+                v-if="!isMobile || activeMobilePane === 'test'"
+                ref="testPaneRef"
+                class="split-pane"
+                style="min-width: 0; height: 100%; overflow: hidden;"
+            >
                 <NFlex vertical :style="{ height: '100%', gap: '12px' }">
                     <!-- 变量表单（共享所有列） -->
                     <ConversationTestPanel
@@ -558,6 +586,7 @@ import { useWorkspaceModelSelection } from '../../composables/workspaces/useWork
 import { useWorkspaceTemplateSelection } from '../../composables/workspaces/useWorkspaceTemplateSelection'
 import { OptionAccessors } from '../../utils/data-transformer'
 import { useToast } from "../../composables/ui/useToast";
+import { useResponsive } from "../../composables/ui/useResponsive";
 import { useElementSize } from '@vueuse/core'
 import { runTasksWithExecutionMode } from '../../utils/runTasksSequentially'
 import {
@@ -975,6 +1004,8 @@ watch(
 )
 
 const isDraggingSplit = ref(false)
+const { isMobile } = useResponsive()
+const activeMobilePane = ref<"optimize" | "test">("optimize")
 let dragStartX = 0
 let dragStartPct = 0
 
@@ -2230,12 +2261,49 @@ defineExpose({
     display: contents;
 }
 
+.mobile-pane-switcher {
+    display: flex;
+    gap: 4px;
+    padding: 8px 16px;
+    background: var(--n-color);
+    border-bottom: 1px solid var(--n-border-color);
+}
+
+.pane-tab {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--n-text-color-2);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.pane-tab.active {
+    background: var(--n-primary-color);
+    color: var(--n-primary-text-color);
+}
+
 .context-system-split {
     display: grid;
     width: 100%;
     height: 100%;
     min-height: 0;
     overflow: hidden;
+}
+
+.context-system-split.mobile-mode {
+    display: block;
+    height: auto;
+    overflow: visible;
+}
+
+.context-system-split.mobile-mode .split-pane {
+    height: calc(100vh - 280px);
+    min-height: 200px;
 }
 
 .split-pane {

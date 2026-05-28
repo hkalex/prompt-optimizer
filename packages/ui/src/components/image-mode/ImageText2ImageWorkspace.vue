@@ -8,13 +8,35 @@
                 @clear="handleClearContent"
             />
         </div>
+
+        <!-- Mobile pane switcher -->
+        <div v-if="isMobile" class="mobile-pane-switcher">
+            <button
+                :class="['pane-tab', { active: activeMobilePane === 'optimize' }]"
+                @click="activeMobilePane = 'optimize'"
+            >
+                {{ t('promptOptimizer.optimize') }}
+            </button>
+            <button
+                :class="['pane-tab', { active: activeMobilePane === 'test' }]"
+                @click="activeMobilePane = 'test'"
+            >
+                {{ t('test.layout.test') }}
+            </button>
+        </div>
+
         <div
             ref="splitRootRef"
             class="image-text2image-split"
-            :style="{ gridTemplateColumns: `${mainSplitLeftPct}% 12px 1fr` }"
+            :class="{ 'mobile-mode': isMobile }"
+            :style="isMobile ? {} : { gridTemplateColumns: `${mainSplitLeftPct}% 12px 1fr` }"
         >
             <!-- 左侧：提示词优化区域（文本模型） -->
-            <div class="split-pane" style="min-width: 0; height: 100%; overflow: hidden;">
+            <div
+                v-if="!isMobile || activeMobilePane === 'optimize'"
+                class="split-pane"
+                style="min-width: 0; height: 100%; overflow: hidden;"
+            >
                 <NFlex
                     vertical
                     :style="{ overflow: 'auto', height: '100%', minHeight: 0 }"
@@ -532,6 +554,7 @@
             </div>
 
             <div
+                v-if="!isMobile"
                 class="split-divider"
                 role="separator"
                 tabindex="0"
@@ -543,7 +566,12 @@
             />
 
             <!-- 右侧：图像生成测试区域（图像模型，多列 variants） -->
-            <div ref="testPaneRef" class="split-pane" style="min-width: 0; height: 100%; overflow: hidden;">
+            <div
+                v-if="!isMobile || activeMobilePane === 'test'"
+                ref="testPaneRef"
+                class="split-pane"
+                style="min-width: 0; height: 100%; overflow: hidden;"
+            >
                 <NFlex vertical :style="{ height: '100%', gap: '12px' }">
                     <TemporaryVariablesPanel
                         :manager="temporaryVariablePanelManager"
@@ -963,6 +991,7 @@ import { useTooltipTheme } from '../../composables/ui/useTooltipTheme'
 import FullscreenDialog from "../FullscreenDialog.vue";
 import type { SelectOption } from "../../types/select-options";
 import { useToast } from "../../composables/ui/useToast";
+import { useResponsive } from "../../composables/ui/useResponsive";
 import { getI18nErrorMessage } from '../../utils/error'
 import { withHistorySourceBindingMetadata } from '../../utils/history-source-binding'
 import { resolveSourceAssetRef } from '../../utils/source-asset'
@@ -2350,6 +2379,10 @@ const handleApplyPatch = (payload: { operation: PatchOperation }) => {
 // 输入区折叠状态（初始展开）
 const isInputPanelCollapsed = ref(false);
 
+// 响应式布局状态
+const { isMobile } = useResponsive();
+const activeMobilePane = ref<"optimize" | "test">("optimize");
+
 // 提示词摘要（折叠态显示）
 const promptSummary = computed(() => {
     if (!originalPrompt.value) return '';
@@ -3138,12 +3171,49 @@ onUnmounted(() => {
     display: contents;
 }
 
+.mobile-pane-switcher {
+    display: flex;
+    gap: 4px;
+    padding: 8px 16px;
+    background: var(--n-color);
+    border-bottom: 1px solid var(--n-border-color);
+}
+
+.pane-tab {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--n-text-color-2);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.pane-tab.active {
+    background: var(--n-primary-color);
+    color: var(--n-primary-text-color);
+}
+
 .image-text2image-split {
     display: grid;
     width: 100%;
     height: 100%;
     min-height: 0;
     overflow: hidden;
+}
+
+.image-text2image-split.mobile-mode {
+    display: block;
+    height: auto;
+    overflow: visible;
+}
+
+.image-text2image-split.mobile-mode .split-pane {
+    height: calc(100vh - 280px);
+    min-height: 200px;
 }
 
 .split-pane {
