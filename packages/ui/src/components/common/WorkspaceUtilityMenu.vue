@@ -72,6 +72,63 @@
     </ThemedTooltip>
   </div>
 
+  <Teleport v-if="mobileToolsTargetReady" to="#mobile-workspace-tools-target">
+    <div class="workspace-utility-drawer-group">
+      <SourceAssetBadge
+        v-if="source"
+        :source="source"
+        button-size="small"
+        button-variant="secondary"
+        button-class="workspace-utility-drawer-button"
+      />
+
+      <NDropdown
+        v-if="isPromptGardenEnabled"
+        trigger="click"
+        :options="gardenMenuOptions"
+        placement="bottom-start"
+        @select="handleGardenSelect"
+      >
+        <NButton
+          class="workspace-utility-drawer-button"
+          size="medium"
+          secondary
+          :disabled="disabled"
+          data-testid="workspace-prompt-garden-menu-mobile"
+        >
+          <template #icon>
+            <NIcon>
+              <Plant2 />
+            </NIcon>
+          </template>
+          {{ t('common.promptGarden.title') }}
+        </NButton>
+      </NDropdown>
+
+      <NDropdown
+        trigger="click"
+        :options="menuOptions"
+        placement="bottom-start"
+        @select="handleSelect"
+      >
+        <NButton
+          class="workspace-utility-drawer-button"
+          size="medium"
+          secondary
+          :disabled="disabled"
+          :data-testid="testId ? `${testId}-mobile` : undefined"
+        >
+          <template #icon>
+            <NIcon>
+              <DotsVertical />
+            </NIcon>
+          </template>
+          {{ t('common.workspaceTools') }}
+        </NButton>
+      </NDropdown>
+    </div>
+  </Teleport>
+
   <NModal
     v-model:show="showClearConfirm"
     preset="dialog"
@@ -137,6 +194,7 @@ const showClearConfirm = ref(false)
 const showPromptGardenImport = ref(false)
 const promptGardenImportIntent = ref<'use' | 'favorite'>('use')
 const triggerStyle = ref<CSSProperties>({})
+const mobileToolsTargetReady = ref(false)
 let placementResizeObserver: ResizeObserver | null = null
 
 const isPromptGardenEnabled = computed(() => {
@@ -169,7 +227,10 @@ const updateTriggerPlacement = () => {
 }
 
 onMounted(() => {
-  void nextTick(updateTriggerPlacement)
+  void nextTick(() => {
+    mobileToolsTargetReady.value = !!document.getElementById('mobile-workspace-tools-target')
+    updateTriggerPlacement()
+  })
   window.addEventListener('resize', updateTriggerPlacement)
 
   const wrapper = document.querySelector('.main-content-wrapper')
@@ -302,6 +363,18 @@ const handleConfirmPromptGardenImport = async (request: PromptGardenImportReques
   align-items: center;
 }
 
+.workspace-utility-drawer-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.workspace-utility-drawer-button,
+:deep(.workspace-utility-drawer-button) {
+  justify-content: flex-start;
+}
+
 .workspace-utility-menu-trigger {
   display: inline-flex;
 }
@@ -324,6 +397,12 @@ const handleConfirmPromptGardenImport = async (request: PromptGardenImportReques
 .workspace-utility-button--garden,
 :deep(.workspace-utility-button--garden) {
   color: color-mix(in srgb, var(--n-success-color) 82%, var(--n-text-color-3));
+}
+
+@media (max-width: 639px) {
+  .workspace-utility-button-column {
+    display: none;
+  }
 }
 
 .workspace-clear-content-confirm {

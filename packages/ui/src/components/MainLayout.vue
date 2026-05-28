@@ -69,7 +69,7 @@
 
       <Transition name="mobile-menu">
         <div
-          v-if="isMobile && mobileMenuOpen"
+          v-show="isMobile && mobileMenuOpen"
           class="mobile-menu-overlay"
           role="dialog"
           aria-modal="true"
@@ -96,6 +96,7 @@
             <div class="mobile-drawer-core-navigation">
               <slot name="core-nav"></slot>
             </div>
+            <div id="mobile-workspace-tools-target" class="mobile-drawer-workspace-tools"></div>
             <div class="mobile-drawer-actions">
               <slot name="actions"></slot>
             </div>
@@ -294,6 +295,19 @@ const openBrandWebsite = async () => {
   padding-bottom: 20px;
   margin-bottom: 20px;
   border-bottom: 1px solid var(--n-border-color);
+}
+
+.mobile-drawer-workspace-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--n-border-color);
+}
+
+.mobile-drawer-workspace-tools:empty {
+  display: none;
 }
 
 .mobile-drawer-core-navigation [data-testid="core-nav"] {
