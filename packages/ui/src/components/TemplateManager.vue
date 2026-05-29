@@ -28,62 +28,45 @@
     </template>
 
     <!-- 类型切换：一行网格自动分两行，每行三列，按钮全宽（更易扩展） -->
-    <NGrid :cols="3" :x-gap="8" :y-gap="8">
-      <NGridItem>
-        <NButton block :type="currentCategory==='system-optimize' ? 'primary' : 'default'" @click="currentCategory='system-optimize'">
-          {{ `🎯 ${t('templateManager.optimizeTemplates')}` }}
-        </NButton>
-      </NGridItem>
-      <NGridItem>
-        <NButton block :type="currentCategory==='user-optimize' ? 'primary' : 'default'" @click="currentCategory='user-optimize'">
-          {{ `👤 ${t('templateManager.userOptimizeTemplates')}` }}
-        </NButton>
-      </NGridItem>
-      <NGridItem>
-        <NButton
-          block
-          :type="(currentCategory==='basic-system-iterate' || currentCategory==='basic-user-iterate') ? 'primary' : 'default'"
-          @click="currentCategory = props.basicSubMode === 'system' ? 'basic-system-iterate' : 'basic-user-iterate'"
-        >
-          {{ `🔄 ${t('templateManager.iterateTemplates')}` }}
-        </NButton>
-      </NGridItem>
+    <div class="category-grid">
+      <NButton class="category-grid__btn" block :type="currentCategory==='system-optimize' ? 'primary' : 'default'" @click="currentCategory='system-optimize'">
+        {{ `🎯 ${t('templateManager.optimizeTemplates')}` }}
+      </NButton>
+      <NButton class="category-grid__btn" block :type="currentCategory==='user-optimize' ? 'primary' : 'default'" @click="currentCategory='user-optimize'">
+        {{ `👤 ${t('templateManager.userOptimizeTemplates')}` }}
+      </NButton>
+      <NButton
+        class="category-grid__btn"
+        block
+        :type="(currentCategory==='basic-system-iterate' || currentCategory==='basic-user-iterate') ? 'primary' : 'default'"
+        @click="currentCategory = props.basicSubMode === 'system' ? 'basic-system-iterate' : 'basic-user-iterate'"
+      >
+        {{ `🔄 ${t('templateManager.iterateTemplates')}` }}
+      </NButton>
 
-      <NGridItem>
-        <NButton block :type="currentCategory==='context-system-optimize' ? 'primary' : 'default'" @click="currentCategory='context-system-optimize'">
-          {{ `🎯 ${t('templateManager.optimizeTemplatesContext')}` }}
-        </NButton>
-      </NGridItem>
-      <NGridItem>
-        <NButton block :type="currentCategory==='context-user-optimize' ? 'primary' : 'default'" @click="currentCategory='context-user-optimize'">
-          {{ `👤 ${t('templateManager.userOptimizeTemplatesContext')}` }}
-        </NButton>
-      </NGridItem>
-      <NGridItem>
-        <NButton block :type="currentCategory==='context-iterate' ? 'primary' : 'default'" @click="currentCategory='context-iterate'">
-          {{ `🔄 ${t('templateManager.iterateTemplatesContext')}` }}
-        </NButton>
-      </NGridItem>
+      <NButton class="category-grid__btn" block :type="currentCategory==='context-system-optimize' ? 'primary' : 'default'" @click="currentCategory='context-system-optimize'">
+        {{ `🎯 ${t('templateManager.optimizeTemplatesContext')}` }}
+      </NButton>
+      <NButton class="category-grid__btn" block :type="currentCategory==='context-user-optimize' ? 'primary' : 'default'" @click="currentCategory='context-user-optimize'">
+        {{ `👤 ${t('templateManager.userOptimizeTemplatesContext')}` }}
+      </NButton>
+      <NButton class="category-grid__btn" block :type="currentCategory==='context-iterate' ? 'primary' : 'default'" @click="currentCategory='context-iterate'">
+        {{ `🔄 ${t('templateManager.iterateTemplatesContext')}` }}
+      </NButton>
 
       <!-- 图像 · 文生图 -->
-      <NGridItem>
-        <NButton block :type="currentCategory==='image-text2image-optimize' ? 'primary' : 'default'" @click="currentCategory='image-text2image-optimize'">
-          {{ `🖼️ ${t('templateManager.imageText2ImageTemplates')}` }}
-        </NButton>
-      </NGridItem>
+      <NButton class="category-grid__btn" block :type="currentCategory==='image-text2image-optimize' ? 'primary' : 'default'" @click="currentCategory='image-text2image-optimize'">
+        {{ `🖼️ ${t('templateManager.imageText2ImageTemplates')}` }}
+      </NButton>
       <!-- 图像 · 图生图 -->
-      <NGridItem>
-        <NButton block :type="currentCategory==='image-image2image-optimize' ? 'primary' : 'default'" @click="currentCategory='image-image2image-optimize'">
-          {{ `📷 ${t('templateManager.imageImage2ImageTemplates')}` }}
-        </NButton>
-      </NGridItem>
+      <NButton class="category-grid__btn" block :type="currentCategory==='image-image2image-optimize' ? 'primary' : 'default'" @click="currentCategory='image-image2image-optimize'">
+        {{ `📷 ${t('templateManager.imageImage2ImageTemplates')}` }}
+      </NButton>
       <!-- 图像 · 迭代 -->
-      <NGridItem>
-        <NButton block :type="currentCategory==='image-iterate' ? 'primary' : 'default'" @click="currentCategory='image-iterate'">
-          {{ `🌀 ${t('templateManager.imageIterateTemplates')}` }}
-        </NButton>
-      </NGridItem>
-    </NGrid>
+      <NButton class="category-grid__btn" block :type="currentCategory==='image-iterate' ? 'primary' : 'default'" @click="currentCategory='image-iterate'">
+        {{ `🌀 ${t('templateManager.imageIterateTemplates')}` }}
+      </NButton>
+    </div>
 
     <!-- 模板列表 -->
     <NSpace vertical :size="16" style="margin-top: 16px;">
@@ -639,8 +622,7 @@ import { useI18n } from 'vue-i18n'
 import {
   NModal, NCard, NButton, NTag, NInput,
   NSelect, NSpace, NText, NH3, NH4, NScrollbar,
-  NCode,
-  NGrid, NGridItem, NEl
+  NCode, NEl
 } from 'naive-ui'
 import { TemplateProcessor, type Template, type MessageTemplate, type ITemplateManager, TemplateLanguageService } from '@prompt-optimizer/core'
 import { useConfirmDialog } from '../composables/ui/useConfirmDialog'

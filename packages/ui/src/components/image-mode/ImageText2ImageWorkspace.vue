@@ -315,9 +315,9 @@
                     />
 
                     <!-- 控制面板 - 使用网格布局 -->
-                    <NGrid :cols="24" :x-gap="8" responsive="screen">
+                    <div class="img-ctrl-row">
                         <!-- 文本模型选择 -->
-                        <NGridItem :span="7" :xs="24" :sm="7">
+                        <div class="img-ctrl-row__input">
                             <NSpace vertical :size="8">
                                 <NFlex align="center" :size="6" :wrap="false">
                                     <NText
@@ -384,10 +384,10 @@
                                     />
                                 </template>
                             </NSpace>
-                        </NGridItem>
+                        </div>
 
                         <!-- 优化模板选择 -->
-                        <NGridItem :span="11" :xs="24" :sm="11">
+                        <div class="img-ctrl-row__template">
                             <NSpace vertical :size="8">
                                 <NText
                                     :depth="2"
@@ -436,10 +436,10 @@
                                     {{ t("common.loading") }}
                                 </NText>
                             </NSpace>
-                        </NGridItem>
+                        </div>
 
                         <!-- 优化按钮 -->
-                        <NGridItem :span="6" :xs="24" :sm="6" class="flex items-end justify-end">
+                        <div class="img-ctrl-row__actions img-ctrl-row__actions--end">
                             <NSpace :size="8">
                                 <NButton
                                     type="default"
@@ -482,8 +482,8 @@
                                     }}
                                 </NButton>
                             </NSpace>
-                        </NGridItem>
-                    </NGrid>
+                        </div>
+                    </div>
                 </NSpace>
             </TestSourceLinkedCard>
 
@@ -943,8 +943,6 @@ import {
     NSpace,
     NText,
     NFlex,
-    NGrid,
-    NGridItem,
     NIcon,
     NTag,
     NRadioGroup,
@@ -3367,4 +3365,8 @@ onUnmounted(() => {
     min-height: 0;
     overflow: auto;
 }
+</style>
+
+<style scoped>
+@import url('../../assets/styles/flex-layout.css');
 </style>

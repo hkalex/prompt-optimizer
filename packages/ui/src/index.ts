@@ -132,8 +132,6 @@ export {
   NSpace,
   NTag,
   NText,
-  NGrid,
-  NGridItem,
   NIcon,
   NImage,
   NLayout,

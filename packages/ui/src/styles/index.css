@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../assets/styles/flex-layout.css";
 @config "../../tailwind.config.js";
 
 /* 自定义滚动条样式 */

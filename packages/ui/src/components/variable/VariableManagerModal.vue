@@ -177,8 +177,8 @@
                         >
                             {{ t("variables.addNew") }}
                         </NText>
-                        <NGrid cols="12" :x-gap="12" :y-gap="8">
-                            <NGridItem span="4">
+                        <div class="quick-add-row">
+                            <div class="quick-add-row__name">
                                 <NInput
                                     v-model:value="quickAddForm.name"
                                     :placeholder="
@@ -188,8 +188,8 @@
                                     :disabled="props.readonly || loading"
                                     @keyup.enter="quickAddVariable"
                                 />
-                            </NGridItem>
-                            <NGridItem span="6">
+                            </div>
+                            <div class="quick-add-row__value">
                                 <NInput
                                     v-model:value="quickAddForm.value"
                                     :placeholder="
@@ -199,8 +199,8 @@
                                     :disabled="props.readonly || loading"
                                     @keyup.enter="quickAddVariable"
                                 />
-                            </NGridItem>
-                            <NGridItem span="2">
+                            </div>
+                            <div class="quick-add-row__button">
                                 <NButton
                                     @click="quickAddVariable"
                                     type="primary"
@@ -215,8 +215,8 @@
                                 >
                                     {{ t("variables.add") }}
                                 </NButton>
-                            </NGridItem>
-                        </NGrid>
+                            </div>
+                        </div>
                     </div>
                 </template>
             </NCard>
@@ -351,8 +351,6 @@ import {
     NSpace,
     NTag,
     NDataTable,
-    NGrid,
-    NGridItem,
     NInput,
     NCard,
     NRadioGroup,
@@ -1132,7 +1130,3 @@ const executeExport = () => {
 
 // 删除重复的onVariableSave函数，避免冲突
 </script>
-
-<style scoped>
-/* Pure Naive UI implementation - no custom theme CSS needed */
-</style>

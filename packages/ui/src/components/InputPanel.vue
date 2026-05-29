@@ -166,9 +166,9 @@
         />
 
         <!-- 控制面板 -->
-        <NGrid :cols="24" :x-gap="8" responsive="screen">
+        <div class="ctrl-row">
             <!-- 模型选择 -->
-            <NGridItem :span="6" :xs="24" :sm="6">
+            <div class="ctrl-row__item ctrl-row__item--model">
                 <NSpace vertical :size="8">
                     <NFlex align="center" :size="6" :wrap="false" class="input-panel-label-row">
                         <NText
@@ -180,10 +180,10 @@
                     </NFlex>
                     <slot name="model-select"></slot>
                 </NSpace>
-            </NGridItem>
+            </div>
 
             <!-- 提示词模板选择 -->
-            <NGridItem v-if="templateLabel" :span="11" :xs="24" :sm="11">
+            <div v-if="templateLabel" class="ctrl-row__item ctrl-row__item--template">
                 <NSpace vertical :size="8">
                     <NText
                         :depth="2"
@@ -192,21 +192,17 @@
                     >
                     <slot name="template-select"></slot>
                 </NSpace>
-            </NGridItem>
+            </div>
 
             <!-- 控制按钮组 -->
-            <NGridItem
-                :span="templateLabel ? 2 : 13"
-                :xs="24"
-                :sm="templateLabel ? 2 : 13"
-            >
+            <div class="ctrl-row__item">
                 <NSpace vertical :size="8" align="end">
                     <slot name="control-buttons"></slot>
                 </NSpace>
-            </NGridItem>
+            </div>
 
             <!-- 提交按钮区域 -->
-            <NGridItem :span="5" :xs="24" :sm="5" class="flex items-end">
+            <div class="ctrl-row__item ctrl-row__item--buttons">
                 <NSpace :size="8" justify="end" style="width: 100%">
                     <!-- 分析按钮（与优化同级） -->
                     <NButton
@@ -232,8 +228,8 @@
                         {{ loading ? loadingText : buttonText }}
                     </NButton>
                 </NSpace>
-            </NGridItem>
-        </NGrid>
+            </div>
+        </div>
     </NSpace>
 
     <!-- 全屏弹窗 -->
@@ -259,8 +255,7 @@ import {
     NText,
     NSpace,
     NFlex,
-    NGrid,
-    NGridItem,
+    
     NIcon,
     NPopover,
 } from "naive-ui";

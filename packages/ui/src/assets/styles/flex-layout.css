@@ -1,0 +1,148 @@
+/* ==========================================================================
+   Flex Layout System - CSS3 Flexbox replacement for NGrid
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Control Row (InputPanel.vue)
+   Replaces NGrid :cols="24" :x-gap="8" with responsive flex row
+   Spans: model=6, template=11, buttons=5 (total 24)
+   -------------------------------------------------------------------------- */
+.ctrl-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.ctrl-row__item {
+  flex: 0 0 auto;
+}
+
+.ctrl-row__item--model {
+  flex: 0 0 calc(25% - 8px);
+}
+
+.ctrl-row__item--template {
+  flex: 0 0 calc(45.83% - 8px);
+}
+
+.ctrl-row__item--buttons {
+  flex: 0 0 calc(20.83% - 8px);
+}
+
+/* --------------------------------------------------------------------------
+   Image Control Row (Image workspaces)
+   Replaces NGrid :cols="24" :x-gap="8" with responsive flex row
+   Spans: input=7, template=11, actions=6 (total 24)
+   -------------------------------------------------------------------------- */
+.img-ctrl-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.img-ctrl-row__input {
+  flex: 0 0 calc(29.17% - 8px);
+}
+
+.img-ctrl-row__template {
+  flex: 0 0 calc(45.83% - 8px);
+}
+
+.img-ctrl-row__actions {
+  flex: 0 0 calc(25% - 8px);
+}
+
+.img-ctrl-row__actions--end {
+  @apply flex items-end justify-end;
+}
+
+/* --------------------------------------------------------------------------
+   Quick Add Row (VariableManagerModal.vue)
+   Replaces NGrid cols="12" :x-gap="12" :y-gap="8"
+   Spans: name=4, value=6, button=2 (total 12)
+   -------------------------------------------------------------------------- */
+.quick-add-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.quick-add-row__name {
+  flex: 0 0 calc(33.33% - 12px);
+}
+
+.quick-add-row__value {
+  flex: 0 0 calc(50% - 12px);
+}
+
+.quick-add-row__button {
+  flex: 0 0 calc(16.67% - 12px);
+}
+
+/* --------------------------------------------------------------------------
+   Category Grid (TemplateManager.vue)
+   Replaces NGrid :cols="3" :x-gap="8" :y-gap="8"
+   9 equal buttons in flex-wrap container
+   -------------------------------------------------------------------------- */
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.category-grid__btn {
+  flex: 0 0 calc(33.33% - 8px);
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Breakpoint: <640px (xs)
+   Stack all layouts to single column
+   -------------------------------------------------------------------------- */
+@media (max-width: 639px) {
+  /* Control row: full width stack */
+  .ctrl-row {
+    flex-direction: column;
+  }
+
+  .ctrl-row__item--model,
+  .ctrl-row__item--template,
+  .ctrl-row__item--buttons {
+    flex: 1 1 100%;
+  }
+
+  /* Image control row: full width stack */
+  .img-ctrl-row {
+    flex-direction: column;
+  }
+
+  .img-ctrl-row__input,
+  .img-ctrl-row__template,
+  .img-ctrl-row__actions {
+    flex: 1 1 100%;
+  }
+
+  /* Quick add: name/value side-by-side (50/50), button full width below */
+  .quick-add-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .quick-add-row__name {
+    flex: 0 0 calc(50% - 6px);
+  }
+
+  .quick-add-row__value {
+    flex: 0 0 calc(50% - 6px);
+  }
+
+  .quick-add-row__button {
+    flex: 1 1 100%;
+  }
+
+  /* Category grid: 1 column stack */
+  .category-grid__btn {
+    flex: 1 1 100%;
+  }
+}

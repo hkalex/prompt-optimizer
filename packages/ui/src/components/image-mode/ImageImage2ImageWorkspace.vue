@@ -231,10 +231,10 @@
                         </NFlex>
                     </NSpace>
 
-                    <!-- 控制面板 - 使用网格布局 -->
-                    <NGrid :cols="24" :x-gap="8" responsive="screen">
+<!-- 控制面板 - 使用网格布局 -->
+                    <div class="img-ctrl-row">
                         <!-- 文本模型选择 -->
-                        <NGridItem :span="7" :xs="24" :sm="7">
+                        <div class="img-ctrl-row__input">
                             <NSpace vertical :size="8">
                                 <NFlex align="center" :size="6" :wrap="false">
                                     <NText
@@ -301,10 +301,10 @@
                                     />
                                 </template>
                             </NSpace>
-                        </NGridItem>
+                        </div>
 
                         <!-- 优化模板选择 -->
-                        <NGridItem :span="11" :xs="24" :sm="11">
+                        <div class="img-ctrl-row__template">
                             <NSpace vertical :size="8">
                                 <NText
                                     :depth="2"
@@ -319,7 +319,6 @@
                                     v-if="services && services.templateManager"
                                 >
                                     <SelectWithConfig
-                                        data-testid="image-image2image-template-select"
                                         v-model="selectedTemplateIdForSelect"
                                         :options="templateOptions"
                                         :getPrimary="OptionAccessors.getPrimary"
@@ -354,10 +353,10 @@
                                     {{ t("common.loading") }}
                                 </NText>
                             </NSpace>
-                        </NGridItem>
+                        </div>
 
                         <!-- 优化按钮 -->
-                        <NGridItem :span="6" :xs="24" :sm="6" class="flex items-end justify-end">
+                        <div class="img-ctrl-row__actions img-ctrl-row__actions--end">
                             <NSpace :size="8">
                                 <NButton
                                     type="default"
@@ -399,8 +398,8 @@
                                     }}
                                 </NButton>
                             </NSpace>
-                        </NGridItem>
-                    </NGrid>
+                        </div>
+                    </div>
                 </NSpace>
             </TestSourceLinkedCard>
 
@@ -837,8 +836,6 @@ import {
     NUploadDragger,
     NText,
     NFlex,
-    NGrid,
-    NGridItem,
     NP,
     NProgress,
     NAlert,
@@ -2844,5 +2841,4 @@ onUnmounted(() => {
     min-height: 0;
     overflow: auto;
 }
-
 </style>

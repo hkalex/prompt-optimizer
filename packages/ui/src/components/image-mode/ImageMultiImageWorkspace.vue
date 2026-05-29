@@ -221,8 +221,8 @@
                 <NText depth="3">{{ imageInputHint }}</NText>
               </NSpace>
 
-              <NGrid :cols="24" :x-gap="8" responsive="screen">
-                <NGridItem :span="7" :xs="24" :sm="7">
+              <div class="img-ctrl-row">
+                <div class="img-ctrl-row__input">
                   <NSpace vertical :size="8">
                     <NFlex align="center" :size="6" :wrap="false">
                       <NText :depth="2" style="font-size: 14px; font-weight: 500; flex-shrink: 0;">
@@ -252,9 +252,9 @@
                       @config="() => appOpenModelManager && appOpenModelManager('text')"
                     />
                   </NSpace>
-                </NGridItem>
+                </div>
 
-                <NGridItem :span="11" :xs="24" :sm="11">
+                <div class="img-ctrl-row__template">
                   <NSpace vertical :size="8">
                     <NText :depth="2" style="font-size: 14px; font-weight: 500;">
                       {{ t('imageWorkspace.input.optimizeTemplate') }}
@@ -276,9 +276,9 @@
                       @config="() => onOpenTemplateManager('multiimageOptimize')"
                     />
                   </NSpace>
-                </NGridItem>
+                </div>
 
-                <NGridItem :span="6" :xs="24" :sm="6" class="flex items-end justify-end">
+                <div class="img-ctrl-row__actions img-ctrl-row__actions--end">
                   <NSpace :size="8">
                     <NButton
                       type="default"
@@ -301,8 +301,8 @@
                       {{ optimizing ? t('imageWorkspace.input.optimizing') : t('common.optimize') }}
                     </NButton>
                   </NSpace>
-                </NGridItem>
-              </NGrid>
+                </div>
+              </div>
             </NSpace>
           </TestSourceLinkedCard>
 
@@ -628,7 +628,7 @@
 
 <script setup lang="ts">
 import { computed, inject, nextTick, onMounted, onUnmounted, reactive, ref, watch, toRef, type Ref } from 'vue'
-import { NButton, NCard, NEmpty, NFlex, NGrid, NGridItem, NIcon, NInput, NRadioButton, NRadioGroup, NSpace, NText } from 'naive-ui'
+import { NButton, NCard, NEmpty, NFlex, NIcon, NInput, NRadioButton, NRadioGroup, NSpace, NText } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
 import {
   applyPatchOperationsToText,
