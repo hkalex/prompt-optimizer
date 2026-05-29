@@ -9,19 +9,17 @@
     :segmented="true"
     @update:show="(value: boolean) => !value && close()"
   >
-    <template #header-extra>
-      <NSpace align="center" :size="12">
-        <NInput
-          v-model:value="searchQuery"
-          :placeholder="t('history.searchPlaceholder')"
-          size="small"
-          style="width: 200px"
-          clearable
-        >
-          <template #prefix>
-            <span style="font-size: 14px;">🔍</span>
-          </template>
-        </NInput>
+    <NInput
+        v-model:value="searchQuery"
+        :placeholder="t('history.searchPlaceholder')"
+        size="small"
+        style="width: 200px"
+        clearable
+      >
+        <template #prefix>
+          <span style="font-size: 14px;">🔍</span>
+        </template>
+      </NInput>
         <NButton
           v-if="sortedHistory && sortedHistory.length > 0"
           @click="handleClear"
@@ -30,8 +28,6 @@
         >
           {{ t('common.clear') }}
         </NButton>
-      </NSpace>
-    </template>
 
     <NScrollbar style="max-height: 65vh;">
       <NSpace vertical :size="16" v-if="sortedHistory && sortedHistory.length > 0">
@@ -41,85 +37,89 @@
           hoverable
         >
           <template #header>
-            <NSpace justify="space-between" align="center">
-              <NSpace align="center" :size="8">
+            <div class="card-header">
+              <div class="card-header__info">
                 <NText depth="3" style="font-size: 14px;">
                   {{ t('common.createdAt') }} {{ formatDate(chain.rootRecord.timestamp) }}
                 </NText>
-                <!-- 功能模式标签 -->
-                <NTag
-                  :type="getFunctionModeTagType(chain.rootRecord.type)"
+                <NSpace align="center" :size="8" wrap>
+                  <!-- 功能模式标签 -->
+                  <NTag
+                    :type="getFunctionModeTagType(chain.rootRecord.type)"
+                    size="small"
+                  >
+                    {{ getFunctionModeLabel(chain.rootRecord.type) }}
+                  </NTag>
+                  <!-- 优化模式标签 -->
+                  <NTag
+                    v-if="chain.rootRecord.type === 'optimize'"
+                    type="info"
+                    size="small"
+                  >
+                    {{ t('common.system') }}
+                  </NTag>
+                  <NTag
+                    v-if="chain.rootRecord.type === 'userOptimize'"
+                    type="success"
+                    size="small"
+                  >
+                    {{ t('common.user') }}
+                  </NTag>
+                  <!-- 上下文模式优化标签 -->
+                  <NTag
+                    v-if="isMessageOptimizationType(chain.rootRecord.type)"
+                    type="warning"
+                    size="small"
+                  >
+                    {{ t('contextMode.optimizationMode.message') }}
+                  </NTag>
+                  <NTag
+                    v-if="chain.rootRecord.type === 'contextUserOptimize'"
+                    type="success"
+                    size="small"
+                  >
+                    {{ t('contextMode.optimizationMode.variable') }}
+                  </NTag>
+                  <!-- 图像模式优化类型标签 -->
+                  <NTag
+                    v-if="chain.rootRecord.type === 'text2imageOptimize'"
+                    type="success"
+                    size="small"
+                  >
+                    {{ t('image.capability.text2image') }}
+                  </NTag>
+                  <NTag
+                    v-if="chain.rootRecord.type === 'image2imageOptimize'"
+                    type="warning"
+                    size="small"
+                  >
+                    {{ t('image.capability.image2image') }}
+                  </NTag>
+                  <NTag
+                    v-if="chain.rootRecord.type === 'multiimageOptimize'"
+                    type="error"
+                    size="small"
+                  >
+                    {{ t('imageMode.multiimage') }}
+                  </NTag>
+                  <SourceAssetBadge
+                    v-if="getChainSource(chain)"
+                    :source="getChainSource(chain)!"
+                  />
+                </NSpace>
+              </div>
+              <div class="card-header__actions">
+                <NButton
+                  @click="deleteChain(chain.chainId)"
                   size="small"
-                >
-                  {{ getFunctionModeLabel(chain.rootRecord.type) }}
-                </NTag>
-                <!-- 优化模式标签 -->
-                <NTag
-                  v-if="chain.rootRecord.type === 'optimize'"
-                  type="info"
-                  size="small"
-                >
-                  {{ t('common.system') }}
-                </NTag>
-                <NTag
-                  v-if="chain.rootRecord.type === 'userOptimize'"
-                  type="success"
-                  size="small"
-                >
-                  {{ t('common.user') }}
-                </NTag>
-                <!-- 上下文模式优化标签 -->
-                <NTag
-                  v-if="isMessageOptimizationType(chain.rootRecord.type)"
-                  type="warning"
-                  size="small"
-                >
-                  {{ t('contextMode.optimizationMode.message') }}
-                </NTag>
-                <NTag
-                  v-if="chain.rootRecord.type === 'contextUserOptimize'"
-                  type="success"
-                  size="small"
-                >
-                  {{ t('contextMode.optimizationMode.variable') }}
-                </NTag>
-                <!-- 图像模式优化类型标签 -->
-                <NTag
-                  v-if="chain.rootRecord.type === 'text2imageOptimize'"
-                  type="success"
-                  size="small"
-                >
-                  {{ t('image.capability.text2image') }}
-                </NTag>
-                <NTag
-                  v-if="chain.rootRecord.type === 'image2imageOptimize'"
-                  type="warning"
-                  size="small"
-                >
-                  {{ t('image.capability.image2image') }}
-                </NTag>
-                <NTag
-                  v-if="chain.rootRecord.type === 'multiimageOptimize'"
                   type="error"
-                  size="small"
+                  quaternary
+                  :title="$t('common.delete')"
                 >
-                  {{ t('imageMode.multiimage') }}
-                </NTag>
-                <SourceAssetBadge
-                  v-if="getChainSource(chain)"
-                  :source="getChainSource(chain)!"
-                />
-              </NSpace>
-              <NButton
-                @click="deleteChain(chain.chainId)"
-                size="small"
-                type="error"
-                quaternary
-                :title="$t('common.delete')"
-              >
-                {{ $t('common.delete') }}
-              </NButton>
-            </NSpace>
+                  {{ $t('common.delete') }}
+                </NButton>
+              </div>
+            </div>
           </template>
           
           <NText style="font-size: 14px; word-break: break-all;">
@@ -140,24 +140,28 @@
                 :name="record.id"
               >
                 <template #header>
-                  <NSpace align="center" :size="12" style="width: 100%;">
-                    <NText strong style="font-size: 14px;">
-                      {{ t('common.version', { version: record.version }) }}
-                    </NText>
-                    <NText depth="3" style="font-size: 12px;">
-                      {{ formatDate(record.timestamp) }}
-                    </NText>
-                    <NText depth="3" style="font-size: 12px;">
-                      {{ record.modelName || record.modelKey }}
-                    </NText>
-                    <NText 
-                      v-if="record.type === 'iterate' && record.iterationNote" 
-                      depth="3" 
-                      style="font-size: 12px;"
-                    >
-                      - {{ truncateText(record.iterationNote, 30) }}
-                    </NText>
-                  </NSpace>
+                  <div class="card-header" style="gap: 12px;">
+                    <div class="card-header__info">
+                      <NText strong style="font-size: 14px;">
+                        {{ t('common.version', { version: record.version }) }}
+                      </NText>
+                      <NSpace :size="4" wrap>
+                        <NText depth="3" style="font-size: 12px;">
+                          {{ formatDate(record.timestamp) }}
+                        </NText>
+                        <NText depth="3" style="font-size: 12px;">
+                          {{ record.modelName || record.modelKey }}
+                        </NText>
+                        <NText 
+                          v-if="record.type === 'iterate' && record.iterationNote" 
+                          depth="3" 
+                          style="font-size: 12px;"
+                        >
+                          - {{ truncateText(record.iterationNote, 30) }}
+                        </NText>
+                      </NSpace>
+                    </div>
+                  </div>
                 </template>
                 
                 <template #header-extra>
