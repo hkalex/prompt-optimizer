@@ -97,6 +97,29 @@
 }
 
 /* --------------------------------------------------------------------------
+   Card Header (TemplateManager, VariableManagerModal, ToolManagerModal)
+   Stack items vertically in mobile view
+   -------------------------------------------------------------------------- */
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.card-header__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* --------------------------------------------------------------------------
    Mobile Breakpoint: <640px (xs)
    Stack all layouts to single column
    -------------------------------------------------------------------------- */
@@ -144,5 +167,19 @@
   /* Category grid: 1 column stack */
   .category-grid__btn {
     flex: 1 1 100%;
+  }
+
+  /* Card header: stack info and actions vertically on mobile */
+  .card-header {
+    flex-direction: column;
+  }
+
+  .card-header__info {
+    flex-direction: column;
+  }
+
+  .card-header__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 }

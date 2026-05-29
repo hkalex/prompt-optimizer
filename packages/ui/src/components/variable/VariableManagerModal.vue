@@ -59,51 +59,55 @@
                 :content-style="isPredefinedExpanded ? undefined : 'padding: 0'"
             >
                 <template #header>
-                    <NSpace align="center">
-                        <NText strong>{{ t("variables.predefined") }}</NText>
-                        <NTag size="small" type="info">{{
-                            t("variables.readonly")
-                        }}</NTag>
-                        <NTag size="small" type="default">{{
-                            predefinedVariables.length
-                        }}</NTag>
-                    </NSpace>
-                </template>
-                <template #header-extra>
-                    <NButton
-                        size="small"
-                        quaternary
-                        @click="isPredefinedExpanded = !isPredefinedExpanded"
-                        :title="
-                            isPredefinedExpanded
-                                ? t('common.collapse')
-                                : t('common.expand')
-                        "
-                        :aria-label="
-                            isPredefinedExpanded
-                                ? t('common.collapse')
-                                : t('common.expand')
-                        "
-                    >
-                        <template #icon>
-                            <NIcon>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path
-                                        v-if="isPredefinedExpanded"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M5 15l7-7 7 7"
-                                    />
-                                    <path
-                                        v-else
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M19 9l-7 7-7-7"
-                                    />
-                                </svg>
-                            </NIcon>
-                        </template>
-                    </NButton>
+                    <div class="card-header">
+                        <div class="card-header__info">
+                            <NText strong>{{ t("variables.predefined") }}</NText>
+                            <NSpace align="center" :size="4">
+                                <NTag size="small" type="info">{{
+                                    t("variables.readonly")
+                                }}</NTag>
+                                <NTag size="small" type="default">{{
+                                    predefinedVariables.length
+                                }}</NTag>
+                            </NSpace>
+                        </div>
+                        <div class="card-header__actions">
+                            <NButton
+                                size="small"
+                                quaternary
+                                @click="isPredefinedExpanded = !isPredefinedExpanded"
+                                :title="
+                                    isPredefinedExpanded
+                                        ? t('common.collapse')
+                                        : t('common.expand')
+                                "
+                                :aria-label="
+                                    isPredefinedExpanded
+                                        ? t('common.collapse')
+                                        : t('common.expand')
+                                "
+                            >
+                                <template #icon>
+                                    <NIcon>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path
+                                                v-if="isPredefinedExpanded"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M5 15l7-7 7 7"
+                                            />
+                                            <path
+                                                v-else
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M19 9l-7 7-7-7"
+                                            />
+                                        </svg>
+                                    </NIcon>
+                                </template>
+                            </NButton>
+                        </div>
+                    </div>
                 </template>
 
                 <NDataTable
@@ -120,12 +124,14 @@
             <!-- 自定义变量组 -->
             <NCard size="small">
                 <template #header>
-                    <NSpace align="center">
-                        <NText strong>{{ t("variables.custom") }}</NText>
-                        <NTag size="small" type="success">{{
-                            customVariables.length
-                        }}</NTag>
-                    </NSpace>
+                    <div class="card-header">
+                        <div class="card-header__info">
+                            <NText strong>{{ t("variables.custom") }}</NText>
+                            <NTag size="small" type="success">{{
+                                customVariables.length
+                            }}</NTag>
+                        </div>
+                    </div>
                 </template>
 
                 <!-- 自定义变量表格或空状态 -->
